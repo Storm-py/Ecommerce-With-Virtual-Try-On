@@ -24,11 +24,7 @@ const userSchema= new Schema(
             lowercase:true,
             index:true
         },
-        avatar:{
-            type:String,
-            required:true,
-        },
-        coverImage:{
+        profileImage:{
             type:String,
         },
         password:{
