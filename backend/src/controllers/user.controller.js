@@ -149,8 +149,8 @@ const changePassword=asyncHandler(async(req,res)=>{
 const updateAccountDetails=asyncHandler(async(req,res)=>{
 
   const {email,fullName}=req.body
-  if(!email || !fullName) throw new ApiError(400,"Atleat one field is required")
-  const user=User.findByIdAndUpdate(req.user._id
+  if (!email && !fullName) throw new ApiError(400, "At least one field is required");
+  const user=await User.findByIdAndUpdate(req.user._id
 ,
 {
   $set:{
@@ -175,16 +175,16 @@ res.status(200).json(
 const updateprofileImage=asyncHandler(async(req,res)=>{
   const user=await User.findById(req.user?._id)
   let previousprofileImage=user.profileImage
-  if(!profileImage) throw new ApiError(400,"You dont have a profile image")
+  if(!previousprofileImage) throw new ApiError(400,"You dont have a profile image")
   await deleteFromCloudinary(previousprofileImage)
 
-  const profileImageLocalPath=req.user?.path
+  const profileImageLocalPath=req.file?.profileImage.path
   if(!profileImageLocalPath) throw new ApiError(400,"You should provide profile Image Local Path")
 
   const profileImage=await uploadOnCloudinary(profileImageLocalPath)
   if(!profileImage) throw new ApiError(400,"Some Error Occured during image uploading")
   user.profileImage=profileImage.url
-  user.save()
+  await user.save()
 
   res.status(200)
   .json(
@@ -196,13 +196,32 @@ const updateprofileImage=asyncHandler(async(req,res)=>{
   
 })
 
+const addToFavourites=asyncHandler(async(req,res)=>{
+  const {productId} =req.body
+  if(!productId) throw new ApiError(400,"Product Id is required")
+  const userId =req.user._id
+
+  const user=await User.findById(userId)
+  
+  const alreadyFavourite=await user.favourites.include(productId)
+  if(!alreadyFavourite) throw new ApiError(400,"Product is already in Favourites")
+  user.favourites.push(productId)
+  user.save();
+  
+  res.status(200).json(
+    new ApiResponse(200,user.favourites,"Product added to the favourites")
+  )
+
+  
+})
+
 
 export {
-  logoutUser,
   registerUser,
   loginUser,
   logoutUser,
   changePassword,
   updateAccountDetails,
-  updateprofileImage
+  updateprofileImage,
+  addToFavourites
 }
