@@ -11,12 +11,12 @@ app.use(urlencoded({extended:true}))
 app.use(express.json())
 
 app.use(cors({
-    origin:process.env.CORS-origin,
+    origin:process.env.CORS_ORIGIN,
     credentials:true,
 }))
 
-import userRouter from './routes/user.routes.js'
-import adminRouter from './routes/admin.routes,js'
+import userRouter from './routes/userRoutes.js'
+import adminRouter from './routes/adminRoutes.js'
 
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/admin",adminRouter)

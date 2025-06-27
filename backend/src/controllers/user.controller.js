@@ -1,7 +1,7 @@
-import { asyncHandler } from "../utils/asyncHandler";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import User from "../models/user.model.js";
+import {User} from "../models/user.model.js";
 import {
   deleteFromCloudinary,
   uploadOnCloudinary,
@@ -11,8 +11,11 @@ const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
 
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
+
+    console.log("Acess Token inside Function ",accessToken)
+    console.log("Refresh Token inside function ", refreshToken)
     user.refreshToken = refreshToken;
 
     await user.save({ validateBeforeSave: false });
@@ -61,16 +64,14 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, createdUser, "User created Sucessfully"));
 });
 
+const checkUser=asyncHandler(async(req,res)=>{
+  res.send("I am working")
+})
 const loginUser = asyncHandler(async (req, res) => {
   const {email,username,password}= req.body
 
-  if(
-    [email,username,password].some((field)=>{
-      return field.trim()===""
-    })
-  ){
-    throw new ApiError(400,"All fields are required")
-  }
+  if(!email && !username) throw new ApiError(400,"Email or username is required")
+
   const user = await User.findOne({
     $or:[{email},{username}]
   })
@@ -78,7 +79,10 @@ const loginUser = asyncHandler(async (req, res) => {
   const passwordValidate = await user.isPasswordCorrect(password)
   if(!passwordValidate) throw new ApiError(400,"Email or Password is incorrect")
 
-  const {accessToken,refreshToken}=generateAccessAndRefreshToken(user._id)
+  const {accessToken,refreshToken}=await generateAccessAndRefreshToken(user._id)
+
+  console.log("Access Token ",accessToken)
+  console.log("Refresh Token ",refreshToken)
 
   const loggedInUser=await User.findById(user._id).select(
     "-password -refreshToken"
@@ -96,7 +100,7 @@ const loginUser = asyncHandler(async (req, res) => {
       200,{
         user:loggedInUser,refreshToken,accessToken
       },
-      "User Created Successfully"
+      "User LoggedIn Successfully"
     )
   )
 });
@@ -190,7 +194,7 @@ const updateprofileImage=asyncHandler(async(req,res)=>{
   .json(
     new ApiResponse(200,
       {profileImage},
-      "Profile Imaged Changed Sucessfully"
+      "Profile Image Changed Sucessfully"
     )
   )
   
@@ -219,6 +223,7 @@ const addToFavorites = asyncHandler(async (req, res) => {
 
 
 export {
+  checkUser,
   registerUser,
   loginUser,
   logoutUser,
