@@ -40,7 +40,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
   if (existingUser)
     throw new ApiError(400, "You should try with a new Email or Username");
-  const profileImageLocalPath = req.files?.profileImage[0].path;
+  const profileImageLocalPath = req.file.path;
   if (!profileImageLocalPath) throw new ApiError(400, "profile Image Required");
   const profileImage=await uploadOnCloudinary(profileImageLocalPath);
 
@@ -58,7 +58,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!createdUser) throw new ApiError(400, "User required");
   res
     .status(201)
-    .json(new ApiResponse(200, createdUser, "User created Sucessfully"));
+    .json(new ApiResponse(201, createdUser, "User created Sucessfully"));
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -178,7 +178,7 @@ const updateprofileImage=asyncHandler(async(req,res)=>{
   if(!previousprofileImage) throw new ApiError(400,"You dont have a profile image")
   await deleteFromCloudinary(previousprofileImage)
 
-  const profileImageLocalPath=req.file?.profileImage.path
+  const profileImageLocalPath=req.file?.path
   if(!profileImageLocalPath) throw new ApiError(400,"You should provide profile Image Local Path")
 
   const profileImage=await uploadOnCloudinary(profileImageLocalPath)
@@ -196,24 +196,26 @@ const updateprofileImage=asyncHandler(async(req,res)=>{
   
 })
 
-const addToFavourites=asyncHandler(async(req,res)=>{
-  const {productId} =req.body
-  if(!productId) throw new ApiError(400,"Product Id is required")
-  const userId =req.user._id
+const addToFavorites = asyncHandler(async (req, res) => {
+  const { productId } = req.body;
+  if (!productId) throw new ApiError(400, "Product Id is required");
 
-  const user=await User.findById(userId)
-  
-  const alreadyFavourite=await user.favourites.include(productId)
-  if(!alreadyFavourite) throw new ApiError(400,"Product is already in Favourites")
-  user.favourites.push(productId)
-  user.save();
-  
+  const user = await User.findById(req.user._id);
+  if (!user) throw new ApiError(404, "User not found");
+
+  const alreadyFavorite = user.favorites.includes(productId.toString());
+  if (alreadyFavorite) {
+    throw new ApiError(400, "Product is already in Favorites");
+  }
+
+  user.favorites.push(productId);
+  await user.save();
+
   res.status(200).json(
-    new ApiResponse(200,user.favourites,"Product added to the favourites")
-  )
+    new ApiResponse(200, user.favorites, "Product added to the favorites")
+  );
+});
 
-  
-})
 
 
 export {
@@ -223,5 +225,5 @@ export {
   changePassword,
   updateAccountDetails,
   updateprofileImage,
-  addToFavourites
+  addToFavorites
 }

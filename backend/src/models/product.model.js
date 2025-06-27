@@ -34,7 +34,7 @@ const productSchema = new Schema(
     images: [
       {
         url: String,
-        publicId: String, // For cloud storage reference
+        publicId: String,
         isPrimary: Boolean,
       },
     ],

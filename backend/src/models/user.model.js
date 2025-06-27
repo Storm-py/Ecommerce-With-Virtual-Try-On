@@ -46,7 +46,7 @@ const userSchema= new Schema(
                 }
             }
         ],
-        favourites:[{
+        favorites:[{
             type:Schema.Types.ObjectId,
             ref:'Product'
         }]
