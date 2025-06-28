@@ -14,8 +14,6 @@ const generateAccessAndRefreshToken = async (userId) => {
     const accessToken = await user.generateAccessToken();
     const refreshToken = await user.generateRefreshToken();
 
-    console.log("Acess Token inside Function ",accessToken)
-    console.log("Refresh Token inside function ", refreshToken)
     user.refreshToken = refreshToken;
 
     await user.save({ validateBeforeSave: false });

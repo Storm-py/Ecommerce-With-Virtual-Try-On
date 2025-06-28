@@ -23,22 +23,24 @@ const uploadMultipleImagesToCloudinary = async function (files) {
   return uploadedImages;
 };
 
-const generateAccessAndRefreshToken = async (userId) => {
-  try {
-    const user = await Admin.findById(userId);
+const generateAccessAndRefreshToken =async (userId)=>{
 
-    const accessToken = await user.generateAccessToken();
-    const refreshToken = await user.generateRefreshToken();
+ try {
+   const user =await Admin.findById(userId)
+ 
+   const accessToken =await user.generateAccessToken()
+   const refreshToken=await user.generateRefreshToken()
+ 
+   user.refreshToken=refreshToken;
+ 
+   await user.save({validateBeforeSave:true})
+ 
+   return{accessToken,refreshToken}
+ } catch (error) {
+    throw new ApiError(400,"Something went wrong while generating tokens")
+ }
 
-    user.refreshToken = refreshToken;
-
-    await user.save({ validateBeforeSave: false });
-
-    return { accessToken, refreshToken };
-  } catch (error) {
-    throw new ApiError(400, "Something Went Wrong While Generating Tokens");
-  }
-};
+}
 
 const registerAdmin = asyncHandler(async (req, res) => {
   const { email, username, password, fullName } = req.body;
@@ -164,4 +166,55 @@ const check = asyncHandler(async (req, res) => {
   res.send("i am working");
 });
 
-export { uplaodProducts, check, registerAdmin, loginAdmin };
+const deleteProducts=asyncHandler(async(req,res)=>{
+
+  const {productId}=req.body
+
+  if(!productId) throw new ApiError(400,"Product ID not available")
+  
+  const deletedProduct=await Product.findByIdAndDelete(productId)
+
+  if(!deletedProduct) throw new ApiError(400,"Product not found")
+  
+  res.status(200).json(
+    new ApiResponse(200,{},"Product deleted Successfully")
+  )
+  
+})
+
+const listProducts=asyncHandler(async(req,res)=>{
+
+  const products=await Product.find()
+
+  if(products.length===0) res.status(200).json(
+    new ApiResponse(200,{products},"Your Products list is empty")
+  )
+  res.status(200).json(
+    new ApiResponse(200,{products},"Products Fetched Succesfully")
+  )
+})
+
+const updateProductDetails=asyncHandler(async(req,res)=>{
+  const {stock,featured,name,price,description,category,}=req.body
+
+})
+
+const changePassword=asyncHandler(async(req,res)=>{
+
+  const{oldPassword,newPassword}=req.body 
+  const userId= await req.user?._id
+  if(!userId) throw new ApiError(400,"User not found")
+  const user=await Admin.findById(userId)
+  if(!user) throw new ApiError(400,"user not found")
+  const isPasswordCorrect=await user.isPasswordCorrect(oldPassword)
+  if(!isPasswordCorrect) throw new ApiError(400,"Please enter the correct Password")
+  user.password=newPassword
+  user.save({validateBeforeSave:false})
+  return res.status(200)
+  .json(
+    new ApiResponse(200,{},"Password changed successfully")
+  )
+
+})
+
+export {updateProductDetails,changePassword,listProducts,deleteProducts, uplaodProducts, check, registerAdmin, loginAdmin };
