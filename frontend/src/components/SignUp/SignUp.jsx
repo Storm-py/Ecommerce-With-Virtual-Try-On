@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
+    username:'',
     email: '',
     password: '',
-    rememberMe: false
+    fullName:''
   });
+  const [message, setMessage] = useState('');
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -16,10 +19,28 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log('Signup submitted:', formData);
-    // Here you would typically make an API call to your backend
+    const response=await fetch(`http://localhost:4000/api/v1/users/register`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      credentials: "include",
+      body:JSON.stringify(formData)
+    })
+
+    if(response.ok){
+      setFormData({
+        username:'',
+        email:'',
+        password:'',
+        fullName:''
+      })
+
+      setMessage('SignUp Successfull')
+    }
+    
   };
 
   return (
@@ -59,11 +80,30 @@ const Signup = () => {
               <div className="mt-1">
                 <input
                   id="userName"
-                  name="userName"
+                  name="username"
                   type="text"
                   autoComplete="username"
                   required
                   value={formData.username}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="ranamuneabmay2018@gmail.com"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <div className="mt-1">
+                <input
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  autoComplete="fullName"
+                  required
+                  value={formData.fullName}
                   onChange={handleChange}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="ranamuneabmay2018@gmail.com"
@@ -95,7 +135,7 @@ const Signup = () => {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#ff491f] hover:bg-[#e03e1a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Log in
+                Sign Up
               </button>
             </div>
           </form>
@@ -120,6 +160,13 @@ const Signup = () => {
                 Login
               </Link>
             </div>
+            {message  && (
+              <div className="text-center text-sm text-green-500 mt-2 font-black">
+                {message}
+              </div>
+            )
+
+            }
           </div>
         </div>
       </div>

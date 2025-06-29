@@ -28,9 +28,8 @@ const registerUser = asyncHandler(async (req, res) => {
  
 
   const { email, username, password, fullName } = req.body;
-
   if (
-    [email, username, password, fullName].some((field) => {
+    [email, username, password,fullName].some((field) => {
       return field.trim() === "";
     })
   ) {
@@ -41,15 +40,18 @@ const registerUser = asyncHandler(async (req, res) => {
   });
   if (existingUser)
     throw new ApiError(400, "You should try with a new Email or Username");
-  const profileImageLocalPath = req.file.path;
-  if (!profileImageLocalPath) throw new ApiError(400, "profile Image Required");
-  const profileImage=await uploadOnCloudinary(profileImageLocalPath);
+  let profileImage;
+  if(req.file){
+    const profileImageLocalPath = req.file.path;
+    if (!profileImageLocalPath) throw new ApiError(400, "profile Image Required");
+    profileImage=await uploadOnCloudinary(profileImageLocalPath);
+  }
 
 
   const user = await User.create({
     fullName,
     email,
-    profileImage: profileImage?.url,
+    profileImage: profileImage?.url || '',
     username: username.toLowerCase(),
     password,
   });

@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Product } from "../models/product.model.js";
+import {Category} from '../models/category.model.js'
 import {
   deleteFromCloudinary,
   uploadOnCloudinary,
@@ -23,28 +24,26 @@ const uploadMultipleImagesToCloudinary = async function (files) {
   return uploadedImages;
 };
 
-const generateAccessAndRefreshToken =async (userId)=>{
+const generateAccessAndRefreshToken = async (userId) => {
+  try {
+    const user = await Admin.findById(userId);
 
- try {
-   const user =await Admin.findById(userId)
- 
-   const accessToken =await user.generateAccessToken()
-   const refreshToken=await user.generateRefreshToken()
- 
-   user.refreshToken=refreshToken;
- 
-   await user.save({validateBeforeSave:true})
- 
-   return{accessToken,refreshToken}
- } catch (error) {
-    throw new ApiError(400,"Something went wrong while generating tokens")
- }
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
 
-}
+    user.refreshToken = refreshToken;
+
+    await user.save({ validateBeforeSave: true });
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(400, "Something went wrong while generating tokens");
+  }
+};
 
 const registerAdmin = asyncHandler(async (req, res) => {
   const { email, username, password, fullName } = req.body;
-
+  
   if (
     [email, username, password, fullName].some((field) => {
       return field.trim() === "";
@@ -120,6 +119,32 @@ const loginAdmin = asyncHandler(async (req, res) => {
     );
 });
 
+const logoutAdmin = asyncHandler(async (req, res) => {
+  const user = req.user._id;
+
+  await Admin.findOneAndDelete(
+    user,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", options)
+    .json(new ApiResponse(200, {}, "Admin Logout Perfectly"));
+});
+
 const uplaodProducts = asyncHandler(async (req, res) => {
   const { name, price, description, category, stock, featured } = req.body;
   if (
@@ -143,15 +168,17 @@ const uplaodProducts = asyncHandler(async (req, res) => {
 
   const admin = await Admin.findById(req.user?._id);
 
+  const existingCategory= await Category.findOne({name:category.trim()})
+
   if (!admin) throw new ApiError(400, "admin not available");
 
   const product = await Product.create({
     name,
-    price:parsedPrice,
+    price: parsedPrice,
     description,
-    category,
+    category:existingCategory._id,
     images,
-    stock:parsedStock,
+    stock: parsedStock,
     featured,
   });
   admin.products.push(product._id);
@@ -166,55 +193,61 @@ const check = asyncHandler(async (req, res) => {
   res.send("i am working");
 });
 
-const deleteProducts=asyncHandler(async(req,res)=>{
+const deleteProducts = asyncHandler(async (req, res) => {
+  const { productId } = req.body;
 
-  const {productId}=req.body
+  if (!productId) throw new ApiError(400, "Product ID not available");
 
-  if(!productId) throw new ApiError(400,"Product ID not available")
-  
-  const deletedProduct=await Product.findByIdAndDelete(productId)
+  const deletedProduct = await Product.findByIdAndDelete(productId);
 
-  if(!deletedProduct) throw new ApiError(400,"Product not found")
-  
-  res.status(200).json(
-    new ApiResponse(200,{},"Product deleted Successfully")
-  )
-  
-})
+  if (!deletedProduct) throw new ApiError(400, "Product not found");
 
-const listProducts=asyncHandler(async(req,res)=>{
+  res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Product deleted Successfully"));
+});
 
-  const products=await Product.find()
+const listProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find();
 
-  if(products.length===0) res.status(200).json(
-    new ApiResponse(200,{products},"Your Products list is empty")
-  )
-  res.status(200).json(
-    new ApiResponse(200,{products},"Products Fetched Succesfully")
-  )
-})
+  if (products.length === 0)
+    res
+      .status(200)
+      .json(new ApiResponse(200, { products }, "Your Products list is empty"));
+  res
+    .status(200)
+    .json(new ApiResponse(200, { products }, "Products Fetched Succesfully"));
+});
 
-const updateProductDetails=asyncHandler(async(req,res)=>{
-  const {stock,featured,name,price,description,category,}=req.body
+const updateProductDetails = asyncHandler(async (req, res) => {
+  const { stock, featured, name, price, description, category } = req.body;
 
-})
+  if([stock,featured,name,price,description,category].some((field)=>String(field).trim()!=="")) throw new ApiError(400,"Atlease one field is required")
+  })
 
-const changePassword=asyncHandler(async(req,res)=>{
+const changePassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const userId = await req.user?._id;
+  if (!userId) throw new ApiError(400, "User not found");
+  const user = await Admin.findById(userId);
+  if (!user) throw new ApiError(400, "user not found");
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+  if (!isPasswordCorrect)
+    throw new ApiError(400, "Please enter the correct Password");
+  user.password = newPassword;
+  user.save({ validateBeforeSave: false });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password changed successfully"));
+});
 
-  const{oldPassword,newPassword}=req.body 
-  const userId= await req.user?._id
-  if(!userId) throw new ApiError(400,"User not found")
-  const user=await Admin.findById(userId)
-  if(!user) throw new ApiError(400,"user not found")
-  const isPasswordCorrect=await user.isPasswordCorrect(oldPassword)
-  if(!isPasswordCorrect) throw new ApiError(400,"Please enter the correct Password")
-  user.password=newPassword
-  user.save({validateBeforeSave:false})
-  return res.status(200)
-  .json(
-    new ApiResponse(200,{},"Password changed successfully")
-  )
-
-})
-
-export {updateProductDetails,changePassword,listProducts,deleteProducts, uplaodProducts, check, registerAdmin, loginAdmin };
+export {
+  updateProductDetails,
+  changePassword,
+  listProducts,
+  deleteProducts,
+  uplaodProducts,
+  check,
+  registerAdmin,
+  loginAdmin,
+}
