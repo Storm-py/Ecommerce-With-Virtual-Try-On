@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Signup = () => {
   });
   const [message, setMessage] = useState('');
 
+  const navigate=useNavigate()
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -39,6 +41,7 @@ const Signup = () => {
       })
 
       setMessage('SignUp Successfull')
+      navigate('/login')
     }
     
   };

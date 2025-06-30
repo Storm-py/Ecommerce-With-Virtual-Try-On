@@ -6,9 +6,31 @@ import { PiShoppingCartSimpleLight } from "react-icons/pi";
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toggleSwitch } from '../../store/sideBarSlice';
+import { useEffect,useState } from 'react';
 
 const Header = () => {
   const dispatch = useDispatch()
+
+  const [user, setUser] = useState('')
+
+  useEffect(()=>{
+    const fetchUser=async()=>{
+      const response=await fetch(`http://localhost:4000/api/v1/users/user`,{
+        method:"GET",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        credentials:"include",
+      })
+      const data= await response.json()
+      console.log(data)
+      if(response.ok){
+        setUser(data.data)
+      }
+    }
+    fetchUser()
+  },[])
+  
 
   const navItems=[
     {
@@ -47,10 +69,11 @@ const Header = () => {
 const navIcons=[
     {
       name:<CiUser size={27}/>,
-      link:'/login'
+      link:user?"/dashboard":'/login'
     },
     {
-      name:<CiHeart size={27}/>
+      name:<CiHeart size={27}/>,
+      link:'/favorites'
     },
     {
       name:<PiShoppingCartSimpleLight size={27}/>,

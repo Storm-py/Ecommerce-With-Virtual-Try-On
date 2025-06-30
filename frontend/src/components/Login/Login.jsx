@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    rememberMe: false
   });
-
+  const [message, setMessage] = useState("")
+  const navigate=useNavigate()
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -15,11 +16,29 @@ const Login = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
+  let response
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log('Login submitted:', formData);
-    // Here you would typically make an API call to your backend
+    response=await fetch(`http://localhost:4000/api/v1/users/login`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      credentials:"include",
+      body:JSON.stringify(formData)
+    })
+    if(response.ok){
+      setFormData({
+        email:'',
+        password:'',
+      })
+
+      setMessage('Login Successfull')
+      navigate('/dashboard')
+    }else{
+      setMessage('Email or Password is incorrect')
+    }
   };
 
   return (
@@ -35,7 +54,7 @@ const Login = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Username or email address *
+                Email address *
               </label>
               <div className="mt-1">
                 <input
@@ -72,19 +91,6 @@ const Login = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="rememberMe"
-                  type="checkbox"
-                  checked={formData.rememberMe}
-                  onChange={handleChange}
-                  className="h-4 w-4 text-[#ff491f] hover:text-[#e03e1a] border-gray-300 rounded"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                  Remember me
-                </label>
-              </div>
 
               <div className="text-sm">
                 <Link to="/forgot-password" className="font-medium text-[#ff491f] hover:text-[#e03e1a]">
@@ -126,6 +132,13 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {
+        message && (
+          <div className={`text-center text-sm ${response?"text-green-500":"text-red-500"} mt-2 font-black`}>
+            {message}
+          </div>
+        )
+      }
     </div>
   );
 };

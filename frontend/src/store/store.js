@@ -5,7 +5,8 @@ import sideBarSlice from "./sideBarSlice";
 const store=configureStore({
     reducer:{
         cart:cartSlice,
-        sideBar:sideBarSlice
+        sideBar:sideBarSlice,
+        user:userSlice
     }
 })
 
