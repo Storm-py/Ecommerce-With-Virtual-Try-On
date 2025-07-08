@@ -66,7 +66,7 @@ const Shop = () => {
       reviews: 1,
     },
     {
-      id: "1",
+      id: "5",
       title: "World Wide Cup Print T-Shirt",
       price: 23.99,
       originalPrice: 29.99,
@@ -81,7 +81,7 @@ const Shop = () => {
       reviews: 2,
     },
     {
-      id: "2",
+      id: "6",
       title: "Sleeveless Ribbed Short Dress Black",
       originalPrice: 19.99,
       price: 14.99,
@@ -96,7 +96,7 @@ const Shop = () => {
       reviews: 1,
     },
     {
-      id: "3",
+      id: "7",
       title: "Slogan Hoodie With Label Detail",
       price: 11.99,
       originalPrice: 18.99,
@@ -111,7 +111,7 @@ const Shop = () => {
       reviews: 1,
     },
     {
-      id: "4",
+      id: "8",
       title: "Basic Colored Sweatpants With Hems",
       price: 19.9,
       originalPrice: 25.9,
@@ -126,7 +126,7 @@ const Shop = () => {
       reviews: 1,
     },
     {
-      id: "1",
+      id: "9",
       title: "World Wide Cup Print T-Shirt",
       price: 23.99,
       originalPrice: 29.99,
@@ -141,7 +141,7 @@ const Shop = () => {
       reviews: 2,
     },
     {
-      id: "2",
+      id: "10",
       title: "Sleeveless Ribbed Short Dress Black",
       originalPrice: 19.99,
       price: 14.99,
@@ -156,7 +156,7 @@ const Shop = () => {
       reviews: 1,
     },
     {
-      id: "3",
+      id: "11",
       title: "Slogan Hoodie With Label Detail",
       price: 11.99,
       originalPrice: 18.99,
@@ -171,7 +171,7 @@ const Shop = () => {
       reviews: 1,
     },
     {
-      id: "4",
+      id: "12",
       title: "Basic Colored Sweatpants With Hems",
       price: 19.9,
       originalPrice: 25.9,

@@ -1,8 +1,9 @@
-import React from 'react'
-import Card from '../Card/Card';
-import ReusableSlider from '../ReusableSlider/ReusableSlider';
+import React from "react";
+import Card from "../../Card/Card";
+import ReusableSlider from "../../ReusableSlider/ReusableSlider";
 
-const FeaturedProducts = () => {
+
+const BestSellerProducts = () => {
   const products = [
     {
       id: "1",
@@ -65,23 +66,27 @@ const FeaturedProducts = () => {
       reviews: 1,
     },
   ];
-  return (
-    <div>
-        <div className='flex items-center justify-between my-20'>
-            <h1 className='w-1/3 text-3xl font-medium'>Featured Products</h1>
-            <p className='text-[#9087ae] mx-auto w-2/3 '>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis pariatur cupiditate labore dolorem quia modi porro, vel, voluptatum veniam iusto voluptates? Veniam, sed officiis. Unde repellat magni doloribus</p>
-        </div>
-        
-          <ReusableSlider yPosition="top-56" leftPosition="-left-8" rightPosition="-right-8">
-            {products.map((product)=>(
-              <div key={product.id} className="px-3">
-                <Card {...product}/>
-              </div>
-            ))}
-          </ReusableSlider>
-        
-    </div>
-  )
-}
 
-export default FeaturedProducts
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold mb-4">Best Seller Products</h2>
+        <p className="text-gray-600 max-w-3xl mx-auto">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas.
+        </p>
+      </div>
+      <ReusableSlider yPosition="top-56" leftPosition="-left-8" rightPosition="-right-8">
+        
+        {products.map((product) => (
+          <div key={product.id} className="px-3">
+            <Card {...product} />
+          </div>
+        ))}
+        
+      </ReusableSlider>
+    </div>
+  );
+};
+
+export default BestSellerProducts;

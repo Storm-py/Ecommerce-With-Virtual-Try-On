@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { userStatusTrue } from '../../store/userSlice';
 
 const Login = () => {
+  const dispatch=useDispatch()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -34,6 +37,7 @@ const Login = () => {
         password:'',
       })
 
+      dispatch(userStatusTrue())      
       setMessage('Login Successfull')
       navigate('/dashboard')
     }else{

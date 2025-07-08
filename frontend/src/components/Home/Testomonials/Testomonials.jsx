@@ -2,7 +2,7 @@ import React from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
 import { Star } from "lucide-react";
-import ReusableSlider from "../ReusableSlider/ReusableSlider";
+import ReusableSlider from "../../ReusableSlider/ReusableSlider";
 
 const Testimonials = () => {
   const reviews = [

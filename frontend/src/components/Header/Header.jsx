@@ -4,32 +4,14 @@ import { CiUser } from "react-icons/ci";
 import { CiSearch,CiHeart } from "react-icons/ci";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toggleSwitch } from '../../store/sideBarSlice';
-import { useEffect,useState } from 'react';
+// import { useEffect,useState } from 'react';
 
 const Header = () => {
   const dispatch = useDispatch()
+  const isLoggedIn=useSelector(state=>state.user.isLoggedIn)
 
-  const [user, setUser] = useState('')
-
-  useEffect(()=>{
-    const fetchUser=async()=>{
-      const response=await fetch(`http://localhost:4000/api/v1/users/user`,{
-        method:"GET",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        credentials:"include",
-      })
-      const data= await response.json()
-      console.log(data)
-      if(response.ok){
-        setUser(data.data)
-      }
-    }
-    fetchUser()
-  },[])
   
 
   const navItems=[
@@ -69,7 +51,7 @@ const Header = () => {
 const navIcons=[
     {
       name:<CiUser size={27}/>,
-      link:user?"/dashboard":'/login'
+      link:isLoggedIn?"/dashboard":'/login'
     },
     {
       name:<CiHeart size={27}/>,

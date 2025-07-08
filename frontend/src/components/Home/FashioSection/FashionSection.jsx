@@ -1,6 +1,6 @@
 import React from "react"
 import { FiArrowRight } from "react-icons/fi"
-import ReusableSlider from "../ReusableSlider/ReusableSlider";
+import ReusableSlider from "../../ReusableSlider/ReusableSlider";
 
 
 const FashionSection = () => {

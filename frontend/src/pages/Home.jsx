@@ -1,13 +1,13 @@
 import React from 'react'
-import Slider from '../components/Slider/Slider'
-import Categories from '../components/Categories/Categories'
-import FashionBannerGrid from '../components/FashionBannerGrid/FashionBannerGrid'
-import BestSellerProducts from '../components/BestSellerProducts/BestSellerProducts'
-import DealOfTheWeek from '../components/DealOfTheWeek/DealOfTheWeek'
-import FeaturedProducts from '../components/FeaturedProducts/FeaturedProducts'
-import FashionSection from '../components/FashioSection/FashionSection'
-import Testomonials from '../components/Testomonials/Testomonials'
-import Articles from '../components/Articles/Articles'
+import Slider from '../components/Home/Slider/Slider'
+import Categories from '../components/Home/Categories/Categories'
+import FashionBannerGrid from '../components/Home/FashionBannerGrid/FashionBannerGrid'
+import BestSellerProducts from '../components/Home/BestSellerProducts/BestSellerProducts'
+import DealOfTheWeek from '../components/Home/DealOfTheWeek/DealOfTheWeek'
+import FeaturedProducts from '../components/Home/FeaturedProducts/FeaturedProducts'
+import FashionSection from '../components/Home/FashioSection/FashionSection'
+import Testomonials from '../components/Home/Testomonials/Testomonials'
+import Articles from '../components/Home/Articles/Articles'
 
 function Home() {
   return (

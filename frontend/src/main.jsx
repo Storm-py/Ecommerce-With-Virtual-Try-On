@@ -18,6 +18,10 @@ import Login from './components/Login/Login.jsx';
 import Signup from './components/SignUp/SignUp.jsx';
 import Cart from './pages/Cart.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import DashboardMain from './components/Dashboard/DashboardMain/DashboardMain.jsx';
+import DashboardOrders from './components/Dashboard/DashboardOrders/DashboardOrders.jsx';
+import DashboardAccountDetails from './components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx';
+
 
 
 const Home = lazy(() => import('./pages/Home.jsx'));
@@ -104,7 +108,32 @@ const router = createBrowserRouter(
             <Dashboard />
           </Suspense>
         }
+      >
+        <Route
+        index
+        element={
+          <Suspense fallback={<div>Loading home...</div>}>
+            <DashboardMain />
+          </Suspense>
+        }
       />
+      <Route
+        path='orders'
+        element={
+          <Suspense fallback={<div>Loading home...</div>}>
+            <DashboardOrders />
+          </Suspense>
+        }
+      />
+      <Route
+        path='account-details'
+        element={
+          <Suspense fallback={<div>Loading home...</div>}>
+            <DashboardAccountDetails />
+          </Suspense>
+        }
+      />
+      </Route>
     </Route>
   )
 );
