@@ -9,10 +9,10 @@ app.use(cors({
     credentials:true,
 }))
 
+app.use(express.json())
 app.use(cookieParser())
 app.use(express.static('public'))
 app.use(urlencoded({extended:true}))
-app.use(express.json())
 
 
 import userRouter from './routes/userRoutes.js'

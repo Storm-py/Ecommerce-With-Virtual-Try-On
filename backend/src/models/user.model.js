@@ -22,7 +22,6 @@ const userSchema= new Schema(
         fullName:{
             type:String,
             required:true,
-            lowercase:true,
             index:true
         },
         profileImage:{
@@ -47,6 +46,10 @@ const userSchema= new Schema(
                 }
             }
         ],
+        orders:[{
+            type:Schema.Types.ObjectId,
+            ref:'Order'
+        }],
         favorites:[{
             type:Schema.Types.ObjectId,
             ref:'Product'

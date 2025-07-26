@@ -4,8 +4,8 @@ import { ApiError } from "./ApiError.js";
 
 cloudinary.config({ 
     cloud_name: 'dq9ggzi8h', 
-    api_key: '473739513497693', 
-    api_secret: '-BOscKVwt8jO8SZ0-LuoTVTec0I'
+    api_key: '443316644896519', 
+    api_secret: 'BAeub8G7IRpdRfuy8YVggjT69oA'
 });
 
 const uploadOnCloudinary=async (localFilePath)=>{
@@ -18,8 +18,7 @@ const uploadOnCloudinary=async (localFilePath)=>{
         fs.unlinkSync(localFilePath)
         return response
     }catch(error){
-
-        return null
+        console.log(error)
     }
 }
 const deleteFromCloudinary=async(localFilePath)=>{
@@ -33,7 +32,7 @@ const deleteFromCloudinary=async(localFilePath)=>{
     })
         return response
     } catch (error) {
-        return null
+        console.log(error)
     }
 }
 

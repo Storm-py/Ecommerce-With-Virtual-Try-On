@@ -57,7 +57,6 @@ const registerUser = asyncHandler(async (req, res) => {
     "-refreshToken -password"
   );
   if (!createdUser) throw new ApiError(400, "User required");
-  console.log("Login Successfull");
   res
     .status(201)
     .json(new ApiResponse(201, createdUser, "User created Sucessfully"));
@@ -66,7 +65,9 @@ const registerUser = asyncHandler(async (req, res) => {
 const getUser = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   if (!userId) throw new ApiError(400, "UserId not Available");
-  const user = await User.findOne({ _id: userId });
+  const user = await User.findOne({ _id: userId }).select(
+    "-password -refreshToken"
+  );
   if (!user)
     throw new ApiError(
       400,
@@ -160,14 +161,16 @@ const changePassword = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  const { email, fullName } = req.body;
-  if (!email && !fullName)
-    throw new ApiError(400, "At least one field is required");
+  const { email, fullName,username } = req.body;
+  if (![email, fullName, username].some(val => val?.trim())) {
+  throw new ApiError(400, "At least one field is required");
+}
   const user = await User.findByIdAndUpdate(
     req.user._id,
     {
       $set: {
         fullName,
+        username,
         email,
       },
     },
@@ -185,15 +188,16 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 const updateprofileImage = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user?._id);
   let previousprofileImage = user.profileImage;
-  if (!previousprofileImage)
-    throw new ApiError(400, "You dont have a profile image");
-  await deleteFromCloudinary(previousprofileImage);
+  if (previousprofileImage){
+    await deleteFromCloudinary(previousprofileImage);
+  }
 
   const profileImageLocalPath = req.file?.path;
   if (!profileImageLocalPath)
     throw new ApiError(400, "You should provide profile Image Local Path");
 
   const profileImage = await uploadOnCloudinary(profileImageLocalPath);
+  
   if (!profileImage)
     throw new ApiError(400, "Some Error Occured during image uploading");
   user.profileImage = profileImage.url;
@@ -231,6 +235,14 @@ const addToFavorites = asyncHandler(async (req, res) => {
       new ApiResponse(200, user.favorites, "Product added to the favorites")
     );
 });
+const getUserFavorites=asyncHandler(async(req,res)=>{
+  const userId=req.user?._id
+  const user=User.findById(userId).populate('favorites')
+  if (!user) throw new ApiError(404, "User not found");
+  res.status(200).json(
+    new ApiResponse(200,user.favorites,"User favorites fetched Sucessfully")
+  )
+})
 
 export {
   getUser,
@@ -241,4 +253,5 @@ export {
   updateAccountDetails,
   updateprofileImage,
   addToFavorites,
+  getUserFavorites
 };

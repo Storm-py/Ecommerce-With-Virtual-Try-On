@@ -72,7 +72,7 @@ const DashboardOrders = () => {
       </div>
       
       {/* Order Filters and Search */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8 shrink grow">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex flex-wrap gap-2">
             <button 

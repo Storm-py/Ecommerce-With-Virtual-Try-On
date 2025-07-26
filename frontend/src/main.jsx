@@ -1,31 +1,31 @@
-import React, { lazy, Suspense } from 'react';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import store from './store/store.js'
-import './index.css';
+import React, { lazy, Suspense } from "react";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import store from "./store/store.js";
+import "./index.css";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
-} from 'react-router-dom';
-import Shop from './pages/Shop.jsx';
-import Men from './pages/Men.jsx';
-import Women from './pages/Women.jsx';
-import Outerwear from './pages/Outerwear.jsx';
-import Login from './components/Login/Login.jsx';
-import Signup from './components/SignUp/SignUp.jsx';
-import Cart from './pages/Cart.jsx';
-import Dashboard from './pages/Dashboard.jsx';
-import DashboardMain from './components/Dashboard/DashboardMain/DashboardMain.jsx';
-import DashboardOrders from './components/Dashboard/DashboardOrders/DashboardOrders.jsx';
-import DashboardAccountDetails from './components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx';
+} from "react-router-dom";
+import Shop from "./pages/Shop.jsx";
+import Men from "./pages/Men.jsx";
+import Women from "./pages/Women.jsx";
+import Outerwear from "./pages/Outerwear.jsx";
+import Login from "./components/Login/Login.jsx";
+import Signup from "./components/SignUp/SignUp.jsx";
+import Cart from "./pages/Cart.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import DashboardMain from "./components/Dashboard/DashboardMain/DashboardMain.jsx";
+import DashboardOrders from "./components/Dashboard/DashboardOrders/DashboardOrders.jsx";
+import DashboardAccountDetails from "./components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx";
+import DashboardPasswordChange from "./components/Dashboard/DashboardPasswordChange/DashboardPasswordChange.jsx";
+import DashboardFavorites from "./components/Dashboard/DashboardFavorites/DashboardFavorites.jsx";
 
-
-
-const Home = lazy(() => import('./pages/Home.jsx'));
-const Layout = lazy(() => import('./Layout.jsx'));
+const Home = lazy(() => import("./pages/Home.jsx"));
+const Layout = lazy(() => import("./Layout.jsx"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,7 +46,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='shop'
+        path="shop"
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Shop />
@@ -54,7 +54,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='men'
+        path="men"
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Men />
@@ -62,7 +62,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='women'
+        path="women"
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Women />
@@ -70,7 +70,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='outerwear'
+        path="outerwear"
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Outerwear />
@@ -78,7 +78,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='login'
+        path="login"
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Login />
@@ -86,7 +86,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='signup'
+        path="signup"
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Signup />
@@ -94,7 +94,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='cart'
+        path="cart"
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Cart />
@@ -102,7 +102,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='dashboard'
+        path="dashboard"
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Dashboard />
@@ -110,38 +110,52 @@ const router = createBrowserRouter(
         }
       >
         <Route
-        index
-        element={
-          <Suspense fallback={<div>Loading home...</div>}>
-            <DashboardMain />
-          </Suspense>
-        }
-      />
-      <Route
-        path='orders'
-        element={
-          <Suspense fallback={<div>Loading home...</div>}>
-            <DashboardOrders />
-          </Suspense>
-        }
-      />
-      <Route
-        path='account-details'
-        element={
-          <Suspense fallback={<div>Loading home...</div>}>
-            <DashboardAccountDetails />
-          </Suspense>
-        }
-      />
+          index
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardMain />
+            </Suspense>
+          }
+        />
+        <Route
+          path="orders"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardOrders />
+            </Suspense>
+          }
+        />
+        <Route
+          path="account-details"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardAccountDetails />
+            </Suspense>
+          }
+        />
+        <Route
+          path="change-password"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardPasswordChange />
+            </Suspense>
+          }
+        />
+        <Route
+          path="favorites"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardFavorites />
+            </Suspense>
+          }
+        />
       </Route>
     </Route>
   )
 );
 
-createRoot(document.getElementById('root')).render(
-  
-    <Provider store={store}>
+createRoot(document.getElementById("root")).render(
+  <Provider store={store}>
     <RouterProvider router={router} />
-    </Provider>
-  
+  </Provider>
 );
