@@ -1,6 +1,5 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import DashboardMain from '../components/Dashboard/DashboardMain/DashboardMain'
 import DashboardSidebar from '../components/Dashboard/DashboardSideBar/DashboardSidebar'
 
 const Dashboard = () => {

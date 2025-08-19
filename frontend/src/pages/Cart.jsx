@@ -8,7 +8,6 @@ import {removeFromCart,clearCart,decreaseQuantity,increaseQuantity} from '../sto
 
 const Cart = () => {
   const dispatch=useDispatch()
-  // Sample cart data
   const [cartItems, setCartItems] = useState([
     {
       id: 1,

@@ -23,6 +23,7 @@ import DashboardOrders from "./components/Dashboard/DashboardOrders/DashboardOrd
 import DashboardAccountDetails from "./components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx";
 import DashboardPasswordChange from "./components/Dashboard/DashboardPasswordChange/DashboardPasswordChange.jsx";
 import DashboardFavorites from "./components/Dashboard/DashboardFavorites/DashboardFavorites.jsx";
+import Product from "./pages/Product.jsx";
 
 const Home = lazy(() => import("./pages/Home.jsx"));
 const Layout = lazy(() => import("./Layout.jsx"));
@@ -98,6 +99,14 @@ const router = createBrowserRouter(
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Cart />
+          </Suspense>
+        }
+      />
+      <Route
+        path="product/:id"
+        element={
+          <Suspense fallback={<div>Loading home...</div>}>
+            <Product />
           </Suspense>
         }
       />

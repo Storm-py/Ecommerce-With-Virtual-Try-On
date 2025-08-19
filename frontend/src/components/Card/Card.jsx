@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { PiStarFill } from "react-icons/pi";
-import { FaHeart, FaEye, FaExchangeAlt, FaShoppingCart } from "react-icons/fa";
 
 const Card = ({
   title,
@@ -35,21 +34,7 @@ const Card = ({
   };
   return (
     <div className={` h-[${height}vw] w-${width} rounded-lg overflow-hidden cursor-pointer relative`}>
-      {isTrending? <h1 className="text-xs bg-white absolute m-3 py-0.5 px-1 rounded">TRENDING</h1>:<h1 className="text-green-400 font-bold bg-white absolute m-3 text-xs px-1 rounded">{discount}%</h1>}
-      <div className={`absolute right-3 top-3 flex flex-col gap-2 transition-opacity duration-300 `}>
-          <button className="bg-white p-2 rounded-full shadow-md hover:text-red-500 cursor-pointer">
-            <FaHeart size={16} />
-          </button>
-          <button className="bg-white p-2 rounded-full shadow-md hover:text-blue-500 cursor-pointer">
-            <FaEye size={16} />
-          </button>
-          <button className="bg-white p-2 rounded-full shadow-md hover:text-green-500 cursor-pointer">
-            <FaExchangeAlt size={16} />
-          </button>
-          <button className="bg-white p-2 rounded-full shadow-md hover:text-yellow-500 cursor-pointer">
-            <FaShoppingCart size={16} />
-          </button>
-        </div>
+      {isTrending? <h1 className="text-[0.7vw] bg-white absolute m-3 py-0.5 px-1 rounded">TRENDING</h1>:<h1 className="text-green-400 font-bold bg-white absolute m-3 text-xs px-1 rounded">{discount}%</h1>}
       <img
         src={images[currentIndex]}
         onMouseMove={handleMouseMove}

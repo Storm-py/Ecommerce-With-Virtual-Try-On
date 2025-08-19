@@ -1,9 +1,17 @@
-
-import React from 'react';
-import ProductFilters from '../components/ProductFilters/ProductFilters';
-import Card from '../components/Card/Card';
+import React from "react";
+import {Link} from "react-router-dom"
+import ProductFilters from "../components/ProductFilters/ProductFilters";
+import Card from "../components/Card/Card";
 
 const Shop = () => {
+  // const [products, setProducts] = useState('')
+
+  // const handleProducts=async(e)=>{
+  //   e.preventDefault()
+  //   const response= await fetch(`http://localhost:4000/api/v1/users/`,{
+
+  //   })
+  // }
   const products = [
     {
       id: "1",
@@ -189,19 +197,26 @@ const Shop = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex">
-        {/* Filters Sidebar */}
         <ProductFilters />
-        
-        {/* Product Grid */}
+
         <div className="flex-1 pl-8 relative">
-          {/* Your product grid content here */}
-          <h1 className='absolute left-20 top-16 text-4xl '>Plus-Size Styles for <br /> Every Season</h1>
-          <p className='absolute left-20 top-40 text-md text-gray-500'>Lorem ipsum dolor sit amet consectetur adipisicing <br /> Velit quaerat ratione adipisci.</p>
-          <img src="https://klbtheme.com/clotya/wp-content/uploads/2022/05/banner-26.jpg" alt="" />
+          <h1 className="absolute left-20 top-16 text-[2vw] ">
+            Plus-Size Styles for <br /> Every Season
+          </h1>
+          <p className="absolute left-20 top-40 text-md text-gray-500 text-[1vw]">
+            Lorem ipsum dolor sit amet consectetur adipisicing <br /> Velit
+            quaerat ratione adipisci.
+          </p>
+          <img
+            src="https://klbtheme.com/clotya/wp-content/uploads/2022/05/banner-26.jpg"
+            alt=""
+          />
           <div className="grid grid-cols-4 gap-4">
-            {products.map((product)=>(
+            {products.map((product) => (
               <div key={product.id} className="px-3 py-4">
-                <Card {...product} height='27' width='52' />
+                <Link to={`/product/${product.id}`}>
+                  <Card {...product} height="27" width="52" />
+                </Link>
               </div>
             ))}
           </div>
@@ -212,6 +227,3 @@ const Shop = () => {
 };
 
 export default Shop;
-
-
-
