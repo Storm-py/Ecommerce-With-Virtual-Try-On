@@ -12,25 +12,16 @@ import Login from "./components/Login.jsx";
 import Signup from "./components/SignUp.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import store from "./store/store.js";
-// import DashboardMain from "./components/Dashboard/DashboardMain/DashboardMain.jsx";
-// import DashboardOrders from "./components/Dashboard/DashboardOrders/DashboardOrders.jsx";
-// import DashboardAccountDetails from "./components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx";
-// import DashboardPasswordChange from "./components/Dashboard/DashboardPasswordChange/DashboardPasswordChange.jsx";
-
-// const Home = lazy(() => import("./pages/Home.jsx"));
+import DashboardMain from "./components/Dashboard/DashboardMain/DashboardMain.jsx";
+import DashboardOrders from "./components/Dashboard/DashboardOrders/DashboardOrders.jsx";
+import DashboardAccountDetails from "./components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx";
+import DashboardPasswordChange from "./components/Dashboard/DashboardPasswordChange/DashboardPasswordChange.jsx";
+import AddProduct from "./pages/AddProduct.jsx";
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route
-        path="/"
-        element={
-          <Suspense fallback={<div>Loading...</div>}>
-            <Dashboard />
-          </Suspense>
-        }
-      />
 
       <Route
         path="register"
@@ -49,6 +40,55 @@ const router = createBrowserRouter(
           </Suspense>
         }
       />
+      <Route
+        path="/"
+        element={
+          <Suspense fallback={<div>Loading home...</div>}>
+            <Dashboard />
+          </Suspense>
+        }
+      >
+        <Route
+          index
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardMain />
+            </Suspense>
+          }
+        />
+        <Route
+          path="orders"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardOrders />
+            </Suspense>
+          }
+        />
+        <Route
+          path="account-details"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardAccountDetails />
+            </Suspense>
+          }
+        />
+        <Route
+          path="change-password"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <DashboardPasswordChange />
+            </Suspense>
+          }
+        />
+        <Route
+          path="add-product"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <AddProduct />
+            </Suspense>
+          }
+        />
+      </Route>
     </>
   )
 );

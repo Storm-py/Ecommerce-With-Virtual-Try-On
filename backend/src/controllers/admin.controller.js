@@ -43,6 +43,8 @@ const generateAccessAndRefreshToken = async (userId) => {
 
 const registerAdmin = asyncHandler(async (req, res) => {
   const { email, username, password, fullName } = req.body;
+
+  let profileImage;
   
   if (
     [email, username, password, fullName].some((field) => {
@@ -56,9 +58,11 @@ const registerAdmin = asyncHandler(async (req, res) => {
   });
   if (existingUser)
     throw new ApiError(400, "You should try with a new Email or Username");
-  const profileImageLocalPath = req.file.path;
-  if (!profileImageLocalPath) throw new ApiError(400, "profile Image Required");
-  const profileImage = await uploadOnCloudinary(profileImageLocalPath);
+  if(req.file){
+    const profileImageLocalPath = req.file.path;
+    if (!profileImageLocalPath) throw new ApiError(400, "profile Image Required");
+    profileImage = await uploadOnCloudinary(profileImageLocalPath);
+  }
 
   const user = await Admin.create({
     fullName,
@@ -122,7 +126,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
 const logoutAdmin = asyncHandler(async (req, res) => {
   const user = req.user._id;
 
-  await Admin.findOneAndDelete(
+  await Admin.findOneAndUpdate(
     user,
     {
       $unset: {
@@ -250,4 +254,5 @@ export {
   check,
   registerAdmin,
   loginAdmin,
+  logoutAdmin
 }
