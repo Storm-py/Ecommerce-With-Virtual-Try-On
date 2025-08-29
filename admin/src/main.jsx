@@ -17,6 +17,8 @@ import DashboardOrders from "./components/Dashboard/DashboardOrders/DashboardOrd
 import DashboardAccountDetails from "./components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx";
 import DashboardPasswordChange from "./components/Dashboard/DashboardPasswordChange/DashboardPasswordChange.jsx";
 import AddProduct from "./pages/AddProduct.jsx";
+import ProductList from "./pages/ProductList.jsx";
+import UpdateProduct from "./pages/UpdateProduct.jsx";
 
 
 const router = createBrowserRouter(
@@ -85,6 +87,22 @@ const router = createBrowserRouter(
           element={
             <Suspense fallback={<div>Loading home...</div>}>
               <AddProduct />
+            </Suspense>
+          }
+        />
+        <Route
+          path="update-product"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <ProductList />
+            </Suspense>
+          }
+        />
+        <Route
+          path="update-product/:id"
+          element={
+            <Suspense fallback={<div>Loading home...</div>}>
+              <UpdateProduct />
             </Suspense>
           }
         />

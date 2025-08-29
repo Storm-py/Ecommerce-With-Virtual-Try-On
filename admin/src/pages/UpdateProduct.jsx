@@ -1,0 +1,28 @@
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import PostForm from '../components/PostForm'
+
+const UpdateProduct = () => {
+    const [product, setProduct] = useState()
+    const {id} =useParams()
+    
+    useEffect(()=>{
+        const findProduct=async()=>{
+            const response=await fetch(`http://localhost:4000/api/v1/admin/get-product/${id}`,{
+                credentials:'include',
+            })
+            
+            if(response.ok){
+                const result=await response.json()
+                console.log(result)
+                setProduct(result.data.product)
+            }
+        }
+        findProduct()
+    },[id])
+  return (
+    <PostForm post={product} />
+  )
+}
+
+export default UpdateProduct

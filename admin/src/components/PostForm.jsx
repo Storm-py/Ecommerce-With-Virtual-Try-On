@@ -1,131 +1,189 @@
-import React from 'react'
-import RTE from './RTE'
-import Input from './Input'
-import { useForm } from 'react-hook-form'
-import Select from './Select'
+import React, { useEffect, useState } from 'react';
+import RTE from './RTE';
+import Input from './Input';
+import { useForm } from 'react-hook-form';
+import Select from './Select';
 
-const PostForm = ({post}) => {
-  const options=[
-    'Men','Women','Kids','Shoes','Accessories','Bags'
-  ]
+const PostForm = ({ post }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
 
-  const {control,register,handleSubmit,getValues} = useForm({
-    defaultValues:{
-       name:post?.name || '',
-       price:post?.price || '',
-       description:post?.description || '',
-       category:post?.category || '',
-       images:post?.images || '',
-       stock:post?.stock || '',
+  const options = ['Men', 'Women', 'Kids', 'Shoes', 'Accessories', 'Bags'];
+
+  const {
+    control,
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+    clearErrors,
+    reset,
+  } = useForm({
+    defaultValues: {
+      name: '',
+      price: '',
+      description: '',
+      category: '',
+      stock: '',
+    },
+  });
+
+  useEffect(() => {
+    if (post) {
+      reset({
+        name: post.name,
+        price: post.price,
+        description: post.description,
+        category: post.category,
+        stock: post.stock,
+      });
     }
-  })
+  }, [post, reset]);
 
-  const submit=async (data)=>{
-    const formdata= new FormData()
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedImages(files);
+    clearErrors('images');
+  };
 
-    formdata.append('name',data.name)
-    formdata.append('price',data.price)
-    formdata.append('content',data.content)
-    formdata.append('category',data.category)
-    formdata.append('stock',data.stock)
-    formdata.append('images',data.images)
+  const submit = async (data) => {
+    setIsSubmitting(true);
+    setSubmitStatus(null);
 
-    if(data.images && data.images.length > 0){
-      for(let i=0; i<data.images.length;i++){
-        formdata.append('images',data.images[i])
+    try {
+      const formdata = new FormData();
+      formdata.append('name', data.name);
+      formdata.append('price', data.price);
+      formdata.append('description', data.description);
+      formdata.append('category', data.category);
+      formdata.append('stock', data.stock);
+
+      if (selectedImages.length > 0) {
+        selectedImages.forEach((image) => {
+          formdata.append('images', image);
+        });
       }
+
+      const url = post
+        ? `http://localhost:4000/api/v1/admin/update-product/${post._id}` // 🟢 Send ID in URL
+        : 'http://localhost:4000/api/v1/admin/add-product';
+
+      const response = await fetch(url, {
+        method: post ? 'PATCH' : 'POST',
+        body: formdata,
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setSubmitStatus({
+          type: 'success',
+          message: `Product ${post ? 'Updated' : 'Added'} Successfully!`,
+        });
+        console.log('Success:', result);
+
+        if (!post) {
+          setSelectedImages([]);
+          reset(); // clear form after adding
+        }
+      } else {
+        const error = await response.json();
+        throw new Error(error.message || 'Something went wrong');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setSubmitStatus({
+        type: 'error',
+        message: error.message || 'Submission failed. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-     if(post){
-      //get the data from the frontend
-      //update that data
-      //update the images
-      //delete the previous images
-      const file=await fetch(`http://localhost:4000/api/v1/admin/update-product`,{
-        method:"POST",
-        body:formdata
-      })
-     }
-  }
+  };
+
   return (
-    <div className='w-[80vw] h-screen p-12'>
-      <h1 className='text-3xl font-bold m-3 mt-6'>Add Product</h1>
-      <form onSubmit={handleSubmit(submit)}>
+    <div className="w-[80vw] min-h-screen p-12 bg-gray-50">
+      <h1 className="text-3xl font-bold m-3 mt-6">
+        {post ? 'Edit Product' : 'Add Product'}
+      </h1>
 
-      
-      <div className='flex items-center justify-between my-8 gap-2'>
-          <div>
-            <h1 className='text-[1vw] font-medium text-gray-500 my-2'>Product Name</h1>
-            
-            <Input
-            type='text'
-            placeholder='Enter Product Name'
-            {...register('name',{
-              required:true
-            })}
-            />
-          </div>
-          <div>
-            <h1 className='text-[1vw] font-medium text-gray-500 my-2'>Product Price</h1>
-            <Input
-            type='number'
-            placeholder='Enter Product Price'
-            {...register('price',{
-              required:true
-            })}
-            />
-          </div>
-      </div>
-
-      
-      <div>
-        <h1 className='text-[1vw] font-medium text-gray-500 my-2'>Product Description</h1>
-        <RTE control={control} name={'description'} defaultValue={getValues("description")}/>
-      </div>
-
-      
-      <div className='flex items-center justify-between mt-6'>
-        <div>
-            <h1 className='text-[1vw] font-medium text-gray-500 my-2'>Product Category</h1>
-            <Select options={options}{...register('category',{
-              required:true
-            })}/>
-            </div>
-            <div>
-            <h1 className='text-[1vw] font-medium text-gray-500 my-2'>Product Stock</h1>
-            <Input
-            type='number'
-            placeholder='Enter Product Stock'
-            {...register('stock',{
-              required:true
-            })}
-            />
+      {submitStatus && (
+        <div
+          className={`p-4 mb-6 rounded-lg ${
+            submitStatus.type === 'success'
+              ? 'bg-green-100 text-green-700'
+              : 'bg-red-100 text-red-700'
+          }`}
+        >
+          {submitStatus.message}
         </div>
-      </div>
+      )}
 
-     
-      <div className='mt-6'>
-        <h1 className='text-[1vw] font-medium text-gray-500 my-2'>Upload Product Images</h1>
-        <Input 
-          type="file" 
-          multiple 
-          accept="image/png , image/jpg , image/jpeg, image/gif" 
-          className='border border-gray-300 w-full py-2 px-3 rounded cursor-pointer'
-          {...register("images")}
-        />
-      </div>
+      <form onSubmit={handleSubmit(submit)} className="bg-white p-8 rounded-lg shadow-md">
+        {/* Name + Price */}
+        <div className="flex items-center justify-between my-8 gap-6">
+          <div className="flex-1">
+            <Input
+              type="text"
+              placeholder="Enter Product Name"
+              {...register('name', { required: 'Product name is required' })}
+              error={errors.name}
+            />
+          </div>
+          <div className="flex-1">
+            <Input
+              type="number"
+              placeholder="Enter Product Price"
+              {...register('price', { required: 'Price is required', min: { value: 0, message: 'Price must be positive' } })}
+              error={errors.price}
+            />
+          </div>
+        </div>
 
-      
-      <div className='mt-8'>
-        <button 
-          type="submit" 
-          className='bg-[#ff491f] text-white font-medium py-2 px-6 rounded-lg shadow hover:opacity-90'>
-          Submit
-        </button>
-      </div>
+        {/* Description */}
+        <div className="my-6">
+          <RTE control={control} name="description" defaultValue={getValues('description')} />
+        </div>
 
+        {/* Category + Stock */}
+        <div className="flex items-center justify-between mt-6 gap-6">
+          <div className="flex-1">
+            <Select
+              options={options}
+              {...register('category', { required: 'Category is required' })}
+              error={errors.category}
+            />
+          </div>
+          <div className="flex-1">
+            <Input
+              type="number"
+              placeholder="Enter Product Stock"
+              {...register('stock', { required: 'Stock quantity is required', min: { value: 0, message: 'Stock cannot be negative' } })}
+              error={errors.stock}
+            />
+          </div>
+        </div>
+
+        {/* Images */}
+        <div className="mt-6">
+          <Input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
+
+        {/* Buttons */}
+        <div className="mt-8 flex gap-4">
+          <button type="submit" disabled={isSubmitting} className="bg-[#ff491f] text-white py-2 px-6 rounded-lg">
+            {isSubmitting ? 'Submitting...' : 'Submit'}
+          </button>
+        </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default PostForm
+export default PostForm;

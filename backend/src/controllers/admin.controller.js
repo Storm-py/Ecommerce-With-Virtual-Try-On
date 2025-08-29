@@ -31,6 +31,7 @@ const generateAccessAndRefreshToken = async (userId) => {
     const accessToken = await user.generateAccessToken();
     const refreshToken = await user.generateRefreshToken();
 
+
     user.refreshToken = refreshToken;
 
     await user.save({ validateBeforeSave: true });
@@ -103,7 +104,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    secure:true
   };
 
   res
@@ -150,9 +151,9 @@ const logoutAdmin = asyncHandler(async (req, res) => {
 });
 
 const uplaodProducts = asyncHandler(async (req, res) => {
-  const { name, price, description, category, stock, featured } = req.body;
+  const { name, price, description, category, stock } = req.body;
   if (
-    [name, price, description, category, stock, featured].some(
+    [name, price, description, category, stock].some(
       (field) => field.trim() === ""
     )
   ) {
@@ -172,7 +173,6 @@ const uplaodProducts = asyncHandler(async (req, res) => {
 
   const admin = await Admin.findById(req.user?._id);
 
-  const existingCategory= await Category.findOne({name:category.trim()})
 
   if (!admin) throw new ApiError(400, "admin not available");
 
@@ -180,10 +180,9 @@ const uplaodProducts = asyncHandler(async (req, res) => {
     name,
     price: parsedPrice,
     description,
-    category:existingCategory._id,
+    category,
     images,
     stock: parsedStock,
-    featured,
   });
   admin.products.push(product._id);
   await admin.save();
@@ -214,20 +213,70 @@ const deleteProducts = asyncHandler(async (req, res) => {
 const listProducts = asyncHandler(async (req, res) => {
   const products = await Product.find();
 
-  if (products.length === 0)
+  if (products.length === 0){
     res
-      .status(200)
-      .json(new ApiResponse(200, { products }, "Your Products list is empty"));
-  res
+    .status(200)
+    .json(new ApiResponse(200, { products }, "Your Products list is empty"));
+  }else{
+    res
     .status(200)
     .json(new ApiResponse(200, { products }, "Products Fetched Succesfully"));
+  }
 });
 
 const updateProductDetails = asyncHandler(async (req, res) => {
+  const { productId } = req.params;
   const { stock, featured, name, price, description, category } = req.body;
 
-  if([stock,featured,name,price,description,category].some((field)=>String(field).trim()!=="")) throw new ApiError(400,"Atlease one field is required")
-  })
+  if (!productId) {
+    throw new ApiError(400, "Product ID is required");
+  }
+
+
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new ApiError(404, "Product not found");
+  }
+
+  const updateFields = {};
+
+  if (name && name.trim() !== "") updateFields.name = name.trim();
+  if (price && !isNaN(Number(price))) updateFields.price = Number(price);
+  if (description && description.trim() !== "")
+    updateFields.description = description.trim();
+  if (category && category.trim() !== "") {
+    const existingCategory = await Category.findOne({ name: category.trim() });
+    if (!existingCategory) throw new ApiError(400, "Category not found");
+    updateFields.category = existingCategory._id;
+  }
+  if (stock && !isNaN(Number(stock))) updateFields.stock = Number(stock);
+  if (typeof featured !== "undefined") updateFields.featured = featured;
+
+  
+  if (req.files?.images && req.files.images.length > 0) {
+    for (const img of product.images) {
+      await deleteFromCloudinary(img.publicId);
+    }
+
+    const newImages = await uploadMultipleImagesToCloudinary(req.files.images);
+    updateFields.images = newImages;
+  }
+
+  if (Object.keys(updateFields).length === 0) {
+    throw new ApiError(400, "Please provide at least one field to update");
+  }
+
+  const updatedProduct = await Product.findByIdAndUpdate(
+    productId,
+    { $set: updateFields },
+    { new: true }
+  );
+
+  res.status(200).json(
+    new ApiResponse(200, updatedProduct, "Product updated successfully")
+  );
+});
+
 
 const changePassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
@@ -245,6 +294,16 @@ const changePassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
 
+const getProduct=asyncHandler(async(req,res)=>{
+  const {id}=req.params;
+  if(!id)throw new ApiError(400,"ID not found of the product")
+  const product= await Product.findById(id)
+  if(!product) throw new ApiError(404,"Product not found")
+  res.status(200).json(
+   new ApiResponse(200,{product},"Product found successfully")
+)
+})
+
 export {
   updateProductDetails,
   changePassword,
@@ -254,5 +313,6 @@ export {
   check,
   registerAdmin,
   loginAdmin,
-  logoutAdmin
+  logoutAdmin,
+  getProduct
 }

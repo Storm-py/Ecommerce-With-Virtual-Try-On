@@ -11,20 +11,37 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
         control={control}
         render={({ field: { onChange } }) => (
           <Editor
+            apiKey="8oliqpldkc3jzto3kts0pirzby61sd9i4pcxe112inhpjdks"
             initialValue={defaultValue}
             init={{
               branding: false,
               height: 500,
               menubar: true,
               plugins: [
-                "advlist autolink lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table paste code help wordcount",
+                "advlist",
+                "autolink",
+                "lists",
+                "link",
+                "image",
+                "charmap",
+                "print",
+                "preview",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "paste",
+                "help",
+                "wordcount",
               ],
               toolbar:
-                "undo redo | formatselect | bold italic backcolor |  alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | reomveformat | help",
-              contentStyle:
-              'body {font-family:Helvetica,Arial,sans-serif:font-size:14px'
+                "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
             }}
             onEditorChange={onChange}
           />

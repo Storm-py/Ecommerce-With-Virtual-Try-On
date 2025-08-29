@@ -8,11 +8,11 @@ const DashboardSidebar = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate('/login');
-  //   }
-  // }, [isLoggedIn, navigate]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/login');
+    }
+  }, [isLoggedIn, navigate]);
 
   const dashboardItems = [
     {

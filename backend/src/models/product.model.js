@@ -26,9 +26,9 @@ const productSchema = new Schema(
       maxlength: [2000, "Description cannot exceed 2000 characters"],
     },
     category: {
-      type:Schema.Types.ObjectId,
-      ref:"Product",
-      required:true
+      type: String,
+      required: true,
+      enum: ["Men", "Women", "Kids", "Shoes", "Accessories", "Bags"],
     },
     images: [
       {
