@@ -2,13 +2,13 @@ import React, { useRef, useState } from "react";
 import { PiStarFill } from "react-icons/pi";
 
 const Card = ({
-  title,
+  name,
   height='36',
   width='72',
   price,
-  originalPrice,
-  isTrending,
-  discount,
+  originalPrice = 42,
+  isTrending='true',
+  discount ='12%',
   images,
   reviews,
 }) => {
@@ -36,7 +36,7 @@ const Card = ({
     <div className={` h-[${height}vw] w-${width} rounded-lg overflow-hidden cursor-pointer relative`}>
       {isTrending? <h1 className="text-[0.7vw] bg-white absolute m-3 py-0.5 px-1 rounded">TRENDING</h1>:<h1 className="text-green-400 font-bold bg-white absolute m-3 text-xs px-1 rounded">{discount}%</h1>}
       <img
-        src={images[currentIndex]}
+        src={images[currentIndex]?.url}
         onMouseMove={handleMouseMove}
         onMouseLeave={resetImage}
         ref={imageContainerRef}
@@ -60,8 +60,8 @@ const Card = ({
           {reviews > 1 ? " reviews" : " review"}
         </h3>
       </div>
-      <div className="m-2">
-        <h1>{title}</h1>
+      <div className="m-2 h-12">
+        <h1>{name}</h1>
       </div>
       <div className="flex items-center justify-start gap-2 mx-2">
         <div>

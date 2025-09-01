@@ -9,6 +9,7 @@ const UpdateProduct = () => {
     useEffect(()=>{
         const findProduct=async()=>{
             const response=await fetch(`http://localhost:4000/api/v1/admin/get-product/${id}`,{
+                method:"GET",
                 credentials:'include',
             })
             

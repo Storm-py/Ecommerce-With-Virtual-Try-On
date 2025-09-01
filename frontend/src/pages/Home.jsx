@@ -1,5 +1,5 @@
 import React from 'react'
-import Slider from '../components/Home/Slider/Slider'
+import HeroSlider from '../components/Home/Slider/Slider'
 import Categories from '../components/Home/Categories/Categories'
 import FashionBannerGrid from '../components/Home/FashionBannerGrid/FashionBannerGrid'
 import BestSellerProducts from '../components/Home/BestSellerProducts/BestSellerProducts'
@@ -14,7 +14,7 @@ function Home() {
   <>
     <div className='flex justify-between py-8'>
     <Categories/>
-    <Slider/>
+    <HeroSlider/>
     </div>
     <FashionBannerGrid/>
     <BestSellerProducts/>

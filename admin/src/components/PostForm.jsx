@@ -66,11 +66,11 @@ const PostForm = ({ post }) => {
       }
 
       const url = post
-        ? `http://localhost:4000/api/v1/admin/update-product/${post._id}` // 🟢 Send ID in URL
+        ? `http://localhost:4000/api/v1/admin/update-product/${post._id}`
         : 'http://localhost:4000/api/v1/admin/add-product';
 
       const response = await fetch(url, {
-        method: post ? 'PATCH' : 'POST',
+        method: post ? 'PUT' : 'POST',
         body: formdata,
         credentials: 'include',
       });
@@ -85,7 +85,7 @@ const PostForm = ({ post }) => {
 
         if (!post) {
           setSelectedImages([]);
-          reset(); // clear form after adding
+          reset();
         }
       } else {
         const error = await response.json();
@@ -121,7 +121,6 @@ const PostForm = ({ post }) => {
       )}
 
       <form onSubmit={handleSubmit(submit)} className="bg-white p-8 rounded-lg shadow-md">
-        {/* Name + Price */}
         <div className="flex items-center justify-between my-8 gap-6">
           <div className="flex-1">
             <Input
@@ -141,12 +140,10 @@ const PostForm = ({ post }) => {
           </div>
         </div>
 
-        {/* Description */}
         <div className="my-6">
           <RTE control={control} name="description" defaultValue={getValues('description')} />
         </div>
 
-        {/* Category + Stock */}
         <div className="flex items-center justify-between mt-6 gap-6">
           <div className="flex-1">
             <Select
@@ -165,7 +162,6 @@ const PostForm = ({ post }) => {
           </div>
         </div>
 
-        {/* Images */}
         <div className="mt-6">
           <Input
             type="file"
@@ -175,7 +171,6 @@ const PostForm = ({ post }) => {
           />
         </div>
 
-        {/* Buttons */}
         <div className="mt-8 flex gap-4">
           <button type="submit" disabled={isSubmitting} className="bg-[#ff491f] text-white py-2 px-6 rounded-lg">
             {isSubmitting ? 'Submitting...' : 'Submit'}

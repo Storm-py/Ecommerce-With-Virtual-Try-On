@@ -90,6 +90,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
   const user = await Admin.findOne({
     $or: [{ email }, { username }],
   });
+
   if (!user) throw new ApiError(400, "Please register the User");
   const passwordValidate = await user.isPasswordCorrect(password);
   if (!passwordValidate)
@@ -197,13 +198,13 @@ const check = asyncHandler(async (req, res) => {
 });
 
 const deleteProducts = asyncHandler(async (req, res) => {
-  const { productId } = req.body;
+  const { id } = req.params;
 
-  if (!productId) throw new ApiError(400, "Product ID not available");
+  if (!id) throw new ApiError(400, "Product ID not available");
 
-  const deletedProduct = await Product.findByIdAndDelete(productId);
+  const deletedProduct = await Product.findByIdAndDelete(id);
 
-  if (!deletedProduct) throw new ApiError(400, "Product not found");
+  if (!deletedProduct) throw new ApiError(400, "Product not Deleted");
 
   res
     .status(200)
@@ -225,15 +226,15 @@ const listProducts = asyncHandler(async (req, res) => {
 });
 
 const updateProductDetails = asyncHandler(async (req, res) => {
-  const { productId } = req.params;
+  const { id } = req.params;
   const { stock, featured, name, price, description, category } = req.body;
 
-  if (!productId) {
+  if (!id) {
     throw new ApiError(400, "Product ID is required");
   }
 
 
-  const product = await Product.findById(productId);
+  const product = await Product.findById(id);
   if (!product) {
     throw new ApiError(404, "Product not found");
   }
@@ -244,12 +245,9 @@ const updateProductDetails = asyncHandler(async (req, res) => {
   if (price && !isNaN(Number(price))) updateFields.price = Number(price);
   if (description && description.trim() !== "")
     updateFields.description = description.trim();
-  if (category && category.trim() !== "") {
-    const existingCategory = await Category.findOne({ name: category.trim() });
-    if (!existingCategory) throw new ApiError(400, "Category not found");
-    updateFields.category = existingCategory._id;
-  }
+  
   if (stock && !isNaN(Number(stock))) updateFields.stock = Number(stock);
+  if (category) updateFields.category = category.trim();
   if (typeof featured !== "undefined") updateFields.featured = featured;
 
   
@@ -267,7 +265,7 @@ const updateProductDetails = asyncHandler(async (req, res) => {
   }
 
   const updatedProduct = await Product.findByIdAndUpdate(
-    productId,
+    id,
     { $set: updateFields },
     { new: true }
   );

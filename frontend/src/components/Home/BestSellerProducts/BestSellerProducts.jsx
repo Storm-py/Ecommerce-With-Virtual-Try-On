@@ -1,71 +1,29 @@
 import React from "react";
-import Card from "../../Card/Card";
-import ReusableSlider from "../../ReusableSlider/ReusableSlider";
+import { useState,useEffect } from "react";
+import Card from "../../Card/Card.jsx";
+import ReusableSlider from "../../ReusableSlider/ReusableSlider.jsx";
 
 
 const BestSellerProducts = () => {
-  const products = [
-    {
-      id: "1",
-      title: "World Wide Cup Print T-Shirt",
-      price: 23.99,
-      originalPrice: 29.99,
-      discount: 24,
-      images: [
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/cup1.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/cup2.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/cup3.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/cup4.jpeg",
-      ],
-      rating: 4,
-      reviews: 2,
-    },
-    {
-      id: "2",
-      title: "Sleeveless Ribbed Short Dress Black",
-      originalPrice: 19.99,
-      price: 14.99,
-      isTrending: true,
-      images: [
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/dressblack1-1.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/dressblack2.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/dressblack3.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/dressblack4.jpeg",
-      ],
-      rating: 5,
-      reviews: 1,
-    },
-    {
-      id: "3",
-      title: "Slogan Hoodie With Label Detail",
-      price: 11.99,
-      originalPrice: 18.99,
-      discount: 17,
-      images: [
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/slogan1.jpg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/slogan2.jpg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/slogan3.jpg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/slogan4.jpg",
-      ],
-      rating: 5,
-      reviews: 1,
-    },
-    {
-      id: "4",
-      title: "Basic Colored Sweatpants With Hems",
-      price: 19.9,
-      originalPrice: 25.9,
-      discount: 14,
-      images: [
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/pants1.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/pants2.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/pants3.jpeg",
-        "https://klbtheme.com/clotya/wp-content/uploads/2022/04/pants4.jpeg",
-      ],
-      rating: 5,
-      reviews: 1,
-    },
-  ];
+  const [products, setProducts] = useState([])
+  
+    useEffect(()=>{
+      const handleProducts=async()=>{
+        try {
+          const response=await fetch(`http://localhost:4000/api/v1/admin/list-products`,{
+            method:"GET",
+            credentials:'include',
+          })
+          if(response.ok){
+            const result=await response.json()
+            setProducts(result.data?.products || [])
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      handleProducts()
+    },[])
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -80,7 +38,7 @@ const BestSellerProducts = () => {
         
         {products.map((product) => (
           <div key={product.id} className="px-3">
-            <Card {...product} />
+            <Card {...product}/>
           </div>
         ))}
         

@@ -1,63 +1,72 @@
 import React from 'react'
-import Slider from 'react-slick';
-import { MdArrowBackIosNew,MdArrowForwardIos } from "react-icons/md";
+import SliderLib from 'react-slick';
+import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const ReusableSlider = ({
-    children,
-    yPosition,
-    leftPosition,
-    rightPosition,
-    slidesToShow=4
-    }) => {
-       const NextArrow = ({ onClick }) => (
-          <div className={`absolute ${yPosition} ${rightPosition} z-10 cursor-pointer`} onClick={onClick}>
-            <MdArrowForwardIos className="text-5xl text-gray-200 hover:text-black" />
-          </div>
-        );
-        
-        const PrevArrow = ({ onClick }) => (
-          <div className={`absolute ${yPosition} ${leftPosition} z-10 cursor-pointer`} onClick={onClick}>
-            <MdArrowBackIosNew className="text-5xl text-gray-200 hover:text-black" />
-          </div>
-        );
-      
-        const sliderSettings = {
-          dots: true,
-          infinite: true,
-          speed: 500,
-          slidesToShow: slidesToShow,
-          lazyLoad:true,
-          slidesToScroll: 2,
-          nextArrow: <NextArrow />,
-          prevArrow: <PrevArrow />,
-          responsive: [
-            {
-              breakpoint: 1024,
-              settings: {
-                slidesToShow: 3,
-              },
-            },
-            {
-              breakpoint: 768, 
-              settings: {
-                slidesToShow: 2,
-              },
-            },
-            {
-              breakpoint: 480, 
-              settings: {
-                slidesToShow: 1,
-              },
-            },
-          ],
-        };
-  return (
-    <div>
-        <Slider {...sliderSettings}>
-            {children}
-        </Slider>
+  children,
+  yPosition = "top-1/2",
+  leftPosition = "left-2",
+  rightPosition = "right-2",
+  slidesToShow = 4
+}) => {
+  const NextArrow = ({ onClick }) => (
+    <div className={`absolute ${yPosition} ${rightPosition} z-10 cursor-pointer bg-white rounded-full p-1 shadow-md`} onClick={onClick}>
+      <MdArrowForwardIos className="text-xl text-gray-600 hover:text-black" />
     </div>
-  )
+  );
+  
+  const PrevArrow = ({ onClick }) => (
+    <div className={`absolute ${yPosition} ${leftPosition} z-10 cursor-pointer bg-white rounded-full p-1 shadow-md`} onClick={onClick}>
+      <MdArrowBackIosNew className="text-xl text-gray-600 hover:text-black" />
+    </div>
+  );
+
+  const sliderSettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: slidesToShow,
+    slidesToScroll: 1,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: Math.min(3, slidesToShow),
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768, 
+        settings: {
+          slidesToScroll: 1,
+          slidesToShow: Math.min(2, slidesToShow),
+        },
+      },
+      {
+        breakpoint: 480, 
+        settings: {
+          slidesToScroll: 1,
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+  
+  return (
+    <div className="relative px-8">
+      <SliderLib {...sliderSettings}>
+        {React.Children.map(children, (child) => (
+          <div className="px-2 focus:outline-none">
+            {child}
+          </div>
+        ))}
+      </SliderLib>
+    </div>
+  );
 }
 
-export default ReusableSlider
+export default ReusableSlider;
