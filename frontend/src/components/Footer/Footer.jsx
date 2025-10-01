@@ -7,17 +7,16 @@ const Footer = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Handle newsletter subscription
     console.log("Subscribed with:", email)
     setEmail("")
   }
 
   return (
     <footer className="w-full">
-      {/* Newsletter and Support Section */}
+     
       <div className="bg-black text-white py-12">
         <div className="container mx-auto px-4 md:px-6 lg:px-8 flex flex-col md:flex-row justify-between">
-          {/* Newsletter Subscription */}
+          
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h2 className="text-3xl font-bold mb-2">Get our emails for info on new items, sales and more.</h2>
             <p className="text-gray-300 mb-6">We'll email you a voucher worth £10 off your first order over £50.</p>
@@ -39,7 +38,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Customer Support */}
+          
           <div className="md:w-1/3">
             <h2 className="text-3xl font-bold mb-2">Need help?</h2>
             <div className="flex items-center mb-2">
@@ -72,11 +71,11 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Main Footer Links */}
+      
       <div className="bg-white py-12">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-            {/* Brand Column */}
+            
             <div className="lg:col-span-1">
               <img className="w-40 m-2" src="https://klbtheme.com/clotya/wp-content/uploads/2022/04/logo.png" alt="" />
               <p className="text-gray-600 mb-4">
@@ -93,7 +92,7 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Information Column */}
+            
             <div>
               <h3 className="text-lg font-bold mb-4">Information</h3>
               <ul className="space-y-2">
@@ -125,7 +124,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Account Column */}
+            
             <div>
               <h3 className="text-lg font-bold mb-4">Account</h3>
               <ul className="space-y-2">
@@ -157,7 +156,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Shop Column */}
+            
             <div>
               <h3 className="text-lg font-bold mb-4">Shop</h3>
               <ul className="space-y-2">
@@ -189,7 +188,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Categories Column */}
+            
             <div>
               <h3 className="text-lg font-bold mb-4">Categories</h3>
               <ul className="space-y-2">
@@ -224,7 +223,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Footer */}
+      
       <div className="border-t border-gray-200 py-6">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">

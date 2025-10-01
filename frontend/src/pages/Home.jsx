@@ -13,7 +13,9 @@ function Home() {
   return (
   <>
     <div className='flex justify-between py-8'>
+     <div className='hidden lg:block'>
     <Categories/>
+     </div>
     <HeroSlider/>
     </div>
     <FashionBannerGrid/>

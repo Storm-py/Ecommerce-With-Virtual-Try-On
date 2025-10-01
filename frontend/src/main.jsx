@@ -10,23 +10,24 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Shop from "./pages/Shop.jsx";
-import Men from "./pages/Men.jsx";
-import Women from "./pages/Women.jsx";
-import Outerwear from "./pages/Outerwear.jsx";
-import Login from "./components/Login/Login.jsx";
-import Signup from "./components/SignUp/SignUp.jsx";
-import Cart from "./pages/Cart.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import DashboardMain from "./components/Dashboard/DashboardMain/DashboardMain.jsx";
-import DashboardOrders from "./components/Dashboard/DashboardOrders/DashboardOrders.jsx";
-import DashboardAccountDetails from "./components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx";
-import DashboardPasswordChange from "./components/Dashboard/DashboardPasswordChange/DashboardPasswordChange.jsx";
-import DashboardFavorites from "./components/Dashboard/DashboardFavorites/DashboardFavorites.jsx";
-import Product from "./pages/Product.jsx";
 
 const Home = lazy(() => import("./pages/Home.jsx"));
 const Layout = lazy(() => import("./Layout.jsx"));
+const Shop = lazy(() => import("./pages/Shop.jsx"));
+const Men = lazy(() => import("./pages/Men.jsx"));
+const Women = lazy(() => import("./pages/Women.jsx"));
+const Outerwear = lazy(() => import("./pages/Outerwear.jsx"));
+const Login = lazy(() => import("./components/Login/Login.jsx"));
+const Signup = lazy(() => import("./components/SignUp/SignUp.jsx"));
+const Cart = lazy(() => import("./pages/Cart.jsx"));
+const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
+const DashboardMain = lazy(() => import("./components/Dashboard/DashboardMain/DashboardMain.jsx"));
+const DashboardOrders = lazy(() => import("./components/Dashboard/DashboardOrders/DashboardOrders.jsx"));
+const DashboardAccountDetails = lazy(() => import("./components/Dashboard/DashboardAccountDetails/DashboardAccountDetails.jsx"));
+const DashboardPasswordChange = lazy(() => import("./components/Dashboard/DashboardPasswordChange/DashboardPasswordChange.jsx"));
+const DashboardFavorites = lazy(() => import("./components/Dashboard/DashboardFavorites/DashboardFavorites.jsx"));
+const Product = lazy(() => import("./pages/Product.jsx"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage.jsx"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -107,6 +108,14 @@ const router = createBrowserRouter(
         element={
           <Suspense fallback={<div>Loading home...</div>}>
             <Product />
+          </Suspense>
+        }
+      />
+      <Route
+        path="order/:id"
+        element={
+          <Suspense fallback={<div>Loading home...</div>}>
+            <CheckoutPage />
           </Suspense>
         }
       />

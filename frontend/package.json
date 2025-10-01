@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.1",
+    "@stripe/stripe-js": "^7.9.0",
     "@tailwindcss/vite": "^4.1.5",
     "html-react-parser": "^5.2.6",
     "lucide-react": "^0.507.0",
@@ -24,6 +25,8 @@
     "redux": "^5.0.1",
     "redux-toolkit": "^1.1.2",
     "slick-carousel": "^1.8.1",
+    "stripe": "^18.5.0",
+    "swiper": "^12.0.2",
     "tailwindcss": "^4.1.5",
     "toolkit": "^1.5.4"
   },

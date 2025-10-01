@@ -1,5 +1,27 @@
 import mongoose, { Schema } from "mongoose";
 
+const reviewSchema = new Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5,
+    },
+    comment: {
+      type: String,
+      trim: true,
+      maxlength: 1000,
+    },
+  },
+  { timestamps: true }
+);
+
 const productSchema = new Schema(
   {
     name: {
@@ -51,18 +73,18 @@ const productSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    reviews: [reviewSchema],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
+productSchema.pre("save", function (next) {
+  if (!this.isModified("name")) return next();
+  this.slug = this.name
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/(^-|-$)+/g, "")
+    .toLowerCase();
+  next();
+});
 
-productSchema.pre("save",async function(next) {
-    if(!this.isModified('name')) return next();
-    this.slug=this.name
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)+/g, '');
-    next()
-})
 export const Product = mongoose.model("Product", productSchema);

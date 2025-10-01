@@ -21,29 +21,35 @@ const Login = () => {
   };
   let response
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    response=await fetch(`http://localhost:4000/api/v1/users/login`,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      credentials:"include",
-      body:JSON.stringify(formData)
-    })
-    if(response.ok){
-      setFormData({
-        email:'',
-        password:'',
-      })
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  response = await fetch(`http://localhost:4000/api/v1/users/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(formData),
+  });
 
-      dispatch(userStatusTrue())      
-      setMessage('Login Successfull')
-      navigate('/dashboard')
-    }else{
-      setMessage('Email or Password is incorrect')
-    }
-  };
+  if (response.ok) {
+    const data = await response.json(); 
+    
+
+    setFormData({
+      email: "",
+      password: "",
+    });
+    console.log(data.data.user)
+    dispatch(userStatusTrue(data.data.user));
+
+    setMessage("Login Successfull");
+    navigate("/dashboard");
+  } else {
+    setMessage("Email or Password is incorrect");
+  }
+};
+
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">

@@ -33,7 +33,7 @@ const Card = ({
     setCurrentIndex(0);
   };
   return (
-    <div className={` h-[${height}vw] w-${width} rounded-lg overflow-hidden cursor-pointer relative`}>
+    <div className={` h-[${height}vw] w-${width} rounded-lg overflow-hidden cursor-pointer relative shadow-2xs`}>
       {isTrending? <h1 className="text-[0.7vw] bg-white absolute m-3 py-0.5 px-1 rounded">TRENDING</h1>:<h1 className="text-green-400 font-bold bg-white absolute m-3 text-xs px-1 rounded">{discount}%</h1>}
       <img
         src={images[currentIndex]?.url}

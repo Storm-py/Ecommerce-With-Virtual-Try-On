@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {upload} from '../middlewares/multer.middleware.js'
-import { registerUser,logoutUser,loginUser,changePassword, updateAccountDetails, updateprofileImage, addToFavorites, getUser,getUserFavorites } from "../controllers/user.controller.js";
+import { registerUser,logoutUser,loginUser,changePassword, updateAccountDetails, updateprofileImage, addToFavorites, getUser,getUserFavorites, addToCart, fetchReviews, addreviews, getCartItems,checkoutSession } from "../controllers/user.controller.js";
 import {userVerifyJWT} from '../middlewares/auth.middleware.js'
 
 const router=Router()
@@ -21,5 +21,9 @@ router.route('/update-profile-image').patch(
     updateprofileImage
 )
 router.route('/favorites').get(userVerifyJWT,getUserFavorites)
+router.route('/get-cartItems').get(userVerifyJWT,getCartItems)
 router.route('/add-to-favorites').post(userVerifyJWT,addToFavorites)
+router.route('/add-to-cart/:id').post(userVerifyJWT,addToCart)
+router.route('/:id/reviews').get(fetchReviews).post(userVerifyJWT, addreviews)
+router.route('/checkout-session').post(checkoutSession)
 export default router

@@ -37,7 +37,7 @@ const Testimonials = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
-      {/* Testimonials Section */}
+      
       <div className="mb-20">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold mb-4">Latest Buyers Reviews</h2>
@@ -69,7 +69,7 @@ const Testimonials = () => {
         </div>
       </div>
 
-      {/* Brands Section */}
+      
       <div className="py-10 border-t border-b border-gray-200">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
           {brands.map((brand) => (
