@@ -42,7 +42,7 @@ const Cart = () => {
   }, []);
 
   const makePayment=async()=>{
-    const stripe=await loadStripe('pk_test_51S85xKKm2Qzq4uK2MJl9G7wGcxjysy5748zOSIgEawCuCXobpZ7CE4txwNa0oRAhTnRUxitzu8HPfYK5D83PgwvA00wUAFtXwB')
+    const stripe=await loadStripe(import.meta.env.STRIPE_SECRET)
     
     const response=await fetch(`http://localhost:4000/api/v1/users/checkout-session`,{
       method:'POST',
