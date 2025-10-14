@@ -7,7 +7,25 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: (origin, callback) => {
+    
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      'http://localhost:3000',                
+      'https://ecommerce-website-self-five.vercel.app',
+    ];
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 
 
 app.use(express.json())
