@@ -28,4 +28,4 @@ app.use("/api/v1/admin",adminRouter)
 
 
 
-export default app
+export {app}
