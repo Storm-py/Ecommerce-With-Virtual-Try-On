@@ -106,9 +106,12 @@ const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken"
   );
   const options = {
-    httpOnly: true,
-    secure: true,
-  };
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",  
+  path: "/",         
+};
+
 
   res
     .status(200)
@@ -141,9 +144,12 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
   );
   const options = {
-    httpOnly: true,
-    secure: true,
-  };
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/",
+};
+
   return res
     .status(200)
     .clearCookie("accessToken", options)
