@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice";
 
-export default function ProductPage({ apiBaseUrl = "http://localhost:4000" }) {
+export default function ProductPage({ apiBaseUrl = import.meta.env.VITE_BACKEND_ROUTE }) {
   const { id: productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
